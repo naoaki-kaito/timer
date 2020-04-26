@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
+import 'package:timr/db_provider.dart';
 import 'package:timr/time_list.dart';
 
 void main() => runApp(MyApp());
