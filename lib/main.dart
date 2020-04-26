@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
-import 'package:timr/button.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timr/button.dart';
+import 'package:timr/app_dialog.dart';
 
 void main() => runApp(MyApp());
 
@@ -47,7 +47,11 @@ class _MyPageState extends State<MyPage> {
       });
     } else {
       _timer.cancel();
-      showFinishDialog();
+      AppDialog.showFinishDialog(context);
+      _isCounting = false;
+      changeButtonStr();
+      _reset();
+
     }
   }
 
@@ -78,32 +82,6 @@ class _MyPageState extends State<MyPage> {
     setState(() {
       _buttonStr = _isCounting ? 'STOP' : 'START';
     });
-  }
-
-  //終了ダイアログ
-  void showFinishDialog() {
-    FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
-
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('通知'),
-            content: Text('タイマーは終了しました。'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    FlutterRingtonePlayer.stop();
-                    _isCounting = false;
-                    changeButtonStr();
-                    _reset();
-                    Navigator.pop(context);
-                  },
-                  child: Text('OK')),
-            ],
-          );
-        });
   }
 
   @override
