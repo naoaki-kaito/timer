@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
+import 'package:timr/time_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,8 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'Anton'),
+      theme: ThemeData(
+        fontFamily: 'Anton',
+        appBarTheme: AppBarTheme(
+          color: Colors.black,
+        ),
+      ),
       home: MyPage(),
+      routes: {
+        '/time_list': (context) => TimeList(),
+      }
     );
   }
 }
@@ -88,7 +97,6 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
           title: Text('Timr'),
         ),
         body: Center(
@@ -113,7 +121,16 @@ class _MyPageState extends State<MyPage> {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  Button.textButton('EDIT', showEditDialog),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Button.textButton('EDIT', showEditDialog),
+                                      SizedBox(width: 20),
+                                      Button.textButton('EDIT TIME LIST', () {
+                                        Navigator.pushNamed(context, '/time_list');
+                                      }),
+                                    ],
+                                  )
                                 ],
                               ))),
                 ],
