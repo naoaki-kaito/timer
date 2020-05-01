@@ -5,6 +5,7 @@ import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
 import 'package:timr/db_provider.dart';
 import 'package:timr/time_list.dart';
+import 'package:timr/util/str_util.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,17 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Anton',
-        appBarTheme: AppBarTheme(
-          color: Colors.black,
+        theme: ThemeData(
+          fontFamily: 'Anton',
+          appBarTheme: AppBarTheme(
+            color: Colors.black,
+          ),
         ),
-      ),
-      home: MyPage(),
-      routes: {
-        '/time_list': (context) => TimeList(),
-      }
-    );
+        home: MyPage(),
+        routes: {
+          '/time_list': (context) => TimeList(),
+        });
   }
 }
 
@@ -40,12 +40,21 @@ class _MyPageState extends State<MyPage> {
   int _nowTime;
   bool _isCounting = false;
   String _buttonStr = '';
+  List _times = [];
 
   @override
   void initState() {
-    _reset();
+    _resetTime();
     changeButtonStr();
+    initTimes();
+
     super.initState();
+  }
+
+  initTimes() async {
+    await DBProvider().checkIsExistTimes();
+    _times = await DBProvider().getAllTimess();
+    print(_times);
   }
 
   //カウントダウンを実行
@@ -59,8 +68,7 @@ class _MyPageState extends State<MyPage> {
       AppDialog.showFinishDialog(context);
       _isCounting = false;
       changeButtonStr();
-      _reset();
-
+      _resetTime();
     }
   }
 
@@ -80,7 +88,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   //リセットボタンをタップした際の処理
-  void _reset() {
+  void _resetTime() {
     setState(() {
       _nowTime = _settedTime;
     });
@@ -107,7 +115,7 @@ class _MyPageState extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(_formatToMS(_nowTime),
+                  Text(StrUtil.formatToMS(_nowTime),
                       style: TextStyle(
                         fontSize: 150.0,
                       )),
@@ -127,7 +135,8 @@ class _MyPageState extends State<MyPage> {
                                       Button.textButton('EDIT', showEditDialog),
                                       SizedBox(width: 20),
                                       Button.textButton('EDIT TIME LIST', () {
-                                        Navigator.pushNamed(context, '/time_list');
+                                        Navigator.pushNamed(
+                                            context, '/time_list');
                                       }),
                                     ],
                                   )
@@ -149,7 +158,7 @@ class _MyPageState extends State<MyPage> {
                     SizedBox(
                       width: 20,
                     ),
-                    Button.textButton('RESET', _reset)
+                    Button.textButton('RESET', _resetTime)
                   ]
                 ],
               ),
@@ -160,9 +169,6 @@ class _MyPageState extends State<MyPage> {
 
   //時間編集ダイアログ
   void showEditDialog() {
-    final TextEditingController _textEditingController =
-        new TextEditingController();
-
     //ダイアログ内で選択した時間
     int newTime = _settedTime;
 
@@ -208,7 +214,7 @@ class _MyPageState extends State<MyPage> {
                         //セーブボタン
                         Button.textButton('Save', () {
                           _settedTime = newTime;
-                          _reset();
+                          _resetTime();
                           Navigator.of(context).pop();
                         }),
                       ],
@@ -218,12 +224,12 @@ class _MyPageState extends State<MyPage> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  //時間のフォーマット
-  String _formatToMS(int seconds) {
-    Duration duration = Duration(seconds: seconds);
-    return duration
-        .toString()
-        .replaceAll(RegExp("^0:"), "")
-        .replaceAll(RegExp("\\..*"), "");
-  }
+//  //時間のフォーマット
+//  String _formatToMS(int seconds) {
+//    Duration duration = Duration(seconds: seconds);
+//    return duration
+//        .toString()
+//        .replaceAll(RegExp("^0:"), "")
+//        .replaceAll(RegExp("\\..*"), "");
+//  }
 }

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
 class TimeModel {
-  String id;
+  int id;
   int time;
-  int order_num;
+  int orderNum;
 
-  TimeModel({this.id, @required this.time, @required this.order_num});
+  TimeModel({this.id, @required this.time, @required this.orderNum});
 
   factory TimeModel.fromMap(Map<String, dynamic> json) => TimeModel(
-      id: json['id'],
-      time: json['title'],
-      order_num: json['order_num']
-  );
+      id: json['id'], time: json['time'], orderNum: json['order_num']);
 
   Map<String, dynamic> toMap() => {
-    'id': id,
-    'time': time,
-    'order_num': order_num,
-  };
+        'id': id,
+        'time': time,
+        'order_num': orderNum,
+      };
 }
