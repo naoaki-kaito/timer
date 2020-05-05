@@ -6,6 +6,7 @@ import 'package:timr/app_dialog.dart';
 import 'package:timr/db_provider.dart';
 import 'package:timr/time_list.dart';
 import 'package:timr/util/str_util.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,25 +37,25 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   Timer _timer;
-  int _settedTime = 60;
+  int _settedTime = 0;
   int _nowTime;
   bool _isCounting = false;
-  String _buttonStr = '';
   List _times = [];
+  int _nowIndex = 0;
 
   @override
   void initState() {
     _resetTime();
-    changeButtonStr();
     initTimes();
-
     super.initState();
   }
 
   initTimes() async {
     await DBProvider().checkIsExistTimes();
-    _times = await DBProvider().getAllTimess();
-    print(_times);
+    _times = await DBProvider().getAllTimes();
+    _nowIndex = 0;
+    _settedTime = _times[_nowIndex].time;
+    _resetTime();
   }
 
   //カウントダウンを実行
@@ -63,18 +64,29 @@ class _MyPageState extends State<MyPage> {
       setState(() {
         _nowTime--;
       });
+    } else if (_times.asMap().containsKey((_nowIndex + 1))) {
+      _handleCounting();
+      _nowIndex ++;
+      _settedTime = _times[_nowIndex].time;
+      _resetTime();
+      _handleCounting();
+      FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
     } else {
       _timer.cancel();
       AppDialog.showFinishDialog(context);
-      _isCounting = false;
-      changeButtonStr();
+      setState(() {
+        _isCounting = false;
+      });
+      _settedTime = _times[0].time;
       _resetTime();
     }
   }
 
   //START, STOP ボタンをタップした際の処理
   void _handleCounting() {
-    _isCounting = !_isCounting;
+    setState(() {
+      _isCounting = !_isCounting;
+    });
 
     if (_isCounting) {
       _timer = Timer.periodic(
@@ -84,20 +96,12 @@ class _MyPageState extends State<MyPage> {
     } else {
       _timer.cancel();
     }
-    changeButtonStr();
   }
 
   //リセットボタンをタップした際の処理
   void _resetTime() {
     setState(() {
       _nowTime = _settedTime;
-    });
-  }
-
-  //START,STOPの文言入れ替え
-  void changeButtonStr() {
-    setState(() {
-      _buttonStr = _isCounting ? 'STOP' : 'START';
     });
   }
 
@@ -152,13 +156,17 @@ class _MyPageState extends State<MyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // START, STOP ボタン
-                  Button.textButton(_buttonStr, _handleCounting),
+                  Button.textButton(_isCounting ? 'STOP' : 'START', _handleCounting),
                   // RESET ボタン
                   if (!_isCounting) ...[
                     SizedBox(
                       width: 20,
                     ),
-                    Button.textButton('RESET', _resetTime)
+                    Button.textButton('RESET', _resetTime),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Button.textButton('RESET ALL', initTimes)
                   ]
                 ],
               ),
@@ -223,13 +231,4 @@ class _MyPageState extends State<MyPage> {
                 ])));
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
-
-//  //時間のフォーマット
-//  String _formatToMS(int seconds) {
-//    Duration duration = Duration(seconds: seconds);
-//    return duration
-//        .toString()
-//        .replaceAll(RegExp("^0:"), "")
-//        .replaceAll(RegExp("\\..*"), "");
-//  }
 }

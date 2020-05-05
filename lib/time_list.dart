@@ -39,7 +39,7 @@ class _TimeList extends State<TimeList> {
                 ),
                 Expanded(
                   child: FutureBuilder(
-                    future: DBProvider().getAllTimess(),
+                    future: DBProvider().getAllTimes(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TimeModel>> snapshot) {
                       if (snapshot.hasData) {
@@ -58,6 +58,7 @@ class _TimeList extends State<TimeList> {
                                   children: <Widget>[
                                     Text(StrUtil.formatToMS(time.time),
                                         style: TextStyle(fontSize: 60)),
+                                    // 編集ボタン
                                     FlatButton.icon(
                                       icon: Icon(Icons.edit),
                                       label: SizedBox(),
@@ -68,6 +69,18 @@ class _TimeList extends State<TimeList> {
                                                 TimeDialog.edit(time));
                                         print(dialogResult);
 
+                                        setState(() {});
+                                      },
+                                    ),
+                                    //削除ボタン
+                                    RaisedButton(
+                                      color: Colors.black,
+                                      textColor: Colors.white,
+                                      shape: StadiumBorder(),
+                                      highlightColor: Colors.grey,
+                                      child: Text('DELETE'),
+                                      onPressed: () {
+                                        DBProvider().deleteTime(time.id);
                                         setState(() {});
                                       },
                                     )

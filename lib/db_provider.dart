@@ -45,9 +45,10 @@ class DBProvider {
         ")");
   }
 
+  //時間が設定されているかチェック。無かった場合、追加する
   Future<void> checkIsExistTimes() async {
     Completer<void> completer = Completer<void>();
-    List<TimeModel> times = await DBProvider().getAllTimess();
+    List<TimeModel> times = await DBProvider().getAllTimes();
     if (times.length == 0) {
       completer.complete();
     } else {
@@ -74,7 +75,7 @@ class DBProvider {
     return res;
   }
 
-  Future<List<TimeModel>> getAllTimess() async {
+  Future<List<TimeModel>> getAllTimes() async {
     final db = await database;
     var res = await db.query(_tableName);
     List<TimeModel> list =
@@ -83,11 +84,6 @@ class DBProvider {
   }
 
   updateTime(TimeModel time) async {
-    print('UPDATE ---------->>>>');
-    print(_tableName);
-    print(time.toMap());
-    print(time.id);
-
     final db = await database;
     var res = await db.update(_tableName, time.toMap(),
         where: "id = ?", whereArgs: [time.id]);
@@ -97,7 +93,7 @@ class DBProvider {
     return res;
   }
 
-  deleteTime(String id) async {
+  deleteTime(int id) async {
     final db = await database;
     var res = db.delete(_tableName, where: "id = ?", whereArgs: [id]);
     return res;

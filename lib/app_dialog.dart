@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:timr/button.dart';
 
 class AppDialog {
   static void showFinishDialog(BuildContext context) {
@@ -10,15 +11,15 @@ class AppDialog {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: Text('通知'),
-            content: Text('タイマーは終了しました。'),
+            title: Text('FINISHED'),
+            content: Text('WELL DONE!!'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
                     FlutterRingtonePlayer.stop();
                     Navigator.pop(context);
                   },
-                  child: Text('OK')),
+                  child: Button.textButton('OK', null)),
             ],
           );
         });
