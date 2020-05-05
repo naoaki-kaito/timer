@@ -56,8 +56,10 @@ class _TimeList extends State<TimeList> {
                                 Divider(),
                                 Row(
                                   children: <Widget>[
-                                    Text(StrUtil.formatToMS(time.time),
-                                        style: TextStyle(fontSize: 60)),
+                                    Expanded(
+                                      child: Text(StrUtil.formatToMS(time.time),
+                                          style: TextStyle(fontSize: 60)),
+                                    ),
                                     // 編集ボタン
                                     FlatButton.icon(
                                       icon: Icon(Icons.edit),
