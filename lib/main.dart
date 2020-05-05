@@ -136,9 +136,7 @@ class _MyPageState extends State<MyPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Button.textButton('EDIT', showEditDialog),
-                                      SizedBox(width: 20),
-                                      Button.textButton('EDIT TIME LIST', () {
+                                      Button.textButton('EDIT', () {
                                         Navigator.pushNamed(
                                             context, '/time_list');
                                       }),
@@ -162,73 +160,12 @@ class _MyPageState extends State<MyPage> {
                     SizedBox(
                       width: 20,
                     ),
-                    Button.textButton('RESET', _resetTime),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Button.textButton('RESET ALL', initTimes)
+                    Button.textButton('RESET', initTimes)
                   ]
                 ],
               ),
             )
           ],
         )));
-  }
-
-  //時間編集ダイアログ
-  void showEditDialog() {
-    //ダイアログ内で選択した時間
-    int newTime = _settedTime;
-
-    Dialog dialog = Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Container(
-            height: 400.0,
-            width: 300.0,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  //時間設定
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: CupertinoTimerPicker(
-                      initialTimerDuration: new Duration(seconds: _settedTime),
-                      mode: CupertinoTimerPickerMode.ms,
-                      onTimerDurationChanged: (newDuration) {
-                        setState(() {
-                          newTime = newDuration.inSeconds;
-                        });
-                      },
-                    ),
-                  ),
-                  //ボタン群
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 50),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        //キャンセルボタン
-                        Button.textButton('Cancel', () {
-                          Navigator.of(context).pop();
-                        }),
-                        //間隔スペース
-                        SizedBox(
-                          width: 20,
-                        ),
-                        //セーブボタン
-                        Button.textButton('Save', () {
-                          _settedTime = newTime;
-                          _resetTime();
-                          Navigator.of(context).pop();
-                        }),
-                      ],
-                    ),
-                  ),
-                ])));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 }
