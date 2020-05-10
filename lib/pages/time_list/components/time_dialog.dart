@@ -5,18 +5,19 @@ import 'package:timr/db_provider.dart';
 import 'package:timr/model/time.dart';
 
 class TimeDialog extends StatelessWidget {
-  TimeModel _timeObj;
-  int _settedTime = 0;
+  final TimeModel timeObj;
+  final int settedTime;
 
-  TimeDialog.add();
-
-  TimeDialog.edit(TimeModel time) {
-    _timeObj = time;
-    _settedTime = time.time;
-  }
+  TimeDialog.add() : this._init(settedTime: 0);
+  TimeDialog.edit(TimeModel time)
+      : this._init(timeObj: time, settedTime: time.time);
+  TimeDialog._init({Key key, this.timeObj, this.settedTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TimeModel _timeObj = timeObj;
+    int _settedTime = settedTime;
+
     return Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

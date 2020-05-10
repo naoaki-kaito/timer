@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
 import 'package:timr/db_provider.dart';
-import 'package:timr/time_list.dart';
+import 'package:timr/pages/time_list/time_list.dart';
 import 'package:timr/util/str_util.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
@@ -66,7 +66,7 @@ class _MyPageState extends State<MyPage> {
       });
     } else if (_times.asMap().containsKey((_nowIndex + 1))) {
       _handleCounting();
-      _nowIndex ++;
+      _nowIndex++;
       _settedTime = _times[_nowIndex].time;
       _resetTime();
       _handleCounting();
@@ -154,7 +154,8 @@ class _MyPageState extends State<MyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // START, STOP ボタン
-                  Button.textButton(_isCounting ? 'STOP' : 'START', _handleCounting),
+                  Button.textButton(
+                      _isCounting ? 'STOP' : 'START', _handleCounting),
                   // RESET ボタン
                   if (!_isCounting) ...[
                     SizedBox(
