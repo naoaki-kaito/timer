@@ -88,7 +88,10 @@ class _TimeList extends State<TimeList> {
                                       alignment: Alignment.centerRight,
                                       child: Padding(
                                         padding: EdgeInsets.only(right: 30),
-                                        child: Icon(Icons.cancel),
+                                        child: Icon(
+                                          Icons.cancel,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     )),
                                 onDismissed: (direction) async {
