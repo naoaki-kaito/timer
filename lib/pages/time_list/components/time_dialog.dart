@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:timr/button.dart';
-import 'package:timr/db_provider.dart';
+import 'package:timr/db/db_provider.dart';
 import 'package:timr/model/time.dart';
 
 class TimeDialog extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timr/db_provider.dart';
+import 'package:timr/db/db_provider.dart';
 import 'package:timr/model/time.dart';
 import 'package:timr/pages/time_list/components/time_dialog.dart';
 import 'package:timr/util/str_util.dart';
