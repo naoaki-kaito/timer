@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
-import 'package:timr/db_provider.dart';
+import 'package:timr/store/db_provider.dart';
 import 'package:timr/pages/time_list/time_list.dart';
+import 'package:timr/store/user_store.dart';
 import 'package:timr/util/str_util.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
@@ -38,7 +40,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   Timer _timer;
   int _settedTime = 0;
-  int _nowTime;
+  int _nowSeconds;
   bool _isCounting = false;
   List _times = [];
   int _nowIndex = 0;
@@ -51,33 +53,49 @@ class _MyPageState extends State<MyPage> {
   }
 
   initTimes() async {
+    // sharedPreferenceのインスタンスを保存しておく
+    UserStore().prefs = await SharedPreferences.getInstance();
+    if (!(UserStore().repeat ?? false)) {
+      UserStore().repeat = false;
+    }
+
     await DBProvider().checkIsExistTimes();
     _times = await DBProvider().getAllTimes();
     _nowIndex = 0;
-    _settedTime = _times[_nowIndex].time;
+    _settedTime = _times[_nowIndex].seconds;
     _resetTime();
   }
 
   //カウントダウンを実行
   void _countDown(Timer timer) {
-    if (_nowTime > 0) {
+    if (_nowSeconds > 0) {
       setState(() {
-        _nowTime--;
+        _nowSeconds--;
       });
     } else if (_times.asMap().containsKey((_nowIndex + 1))) {
+      // 次の設定時間があった場合の処理
       _handleCounting();
       _nowIndex++;
-      _settedTime = _times[_nowIndex].time;
+      _settedTime = _times[_nowIndex].seconds;
+      _resetTime();
+      _handleCounting();
+      FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
+    } else if (UserStore().repeat) {
+      // リピート設定をしていた場合の処理
+      _handleCounting();
+      _nowIndex = 0;
+      _settedTime = _times[0].seconds;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
     } else {
+      // タイマーをストップ
       _timer.cancel();
       AppDialog.showFinishDialog(context);
       setState(() {
         _isCounting = false;
       });
-      _settedTime = _times[0].time;
+      _settedTime = _times[0].seconds;
       _resetTime();
     }
   }
@@ -101,7 +119,7 @@ class _MyPageState extends State<MyPage> {
   //リセットボタンをタップした際の処理
   void _resetTime() {
     setState(() {
-      _nowTime = _settedTime;
+      _nowSeconds = _settedTime;
     });
   }
 
@@ -119,7 +137,7 @@ class _MyPageState extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(StrUtil.formatToMS(_nowTime),
+                  Text(StrUtil.formatToMS(_nowSeconds),
                       style: TextStyle(
                         fontSize: 150.0,
                       )),

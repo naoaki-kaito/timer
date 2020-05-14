@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timr/db_provider.dart';
+import 'package:timr/store/db_provider.dart';
 import 'package:timr/model/time.dart';
 import 'package:timr/pages/time_list/components/time_dialog.dart';
+import 'package:timr/store/user_store.dart';
 import 'package:timr/util/str_util.dart';
 
 class TimeList extends StatefulWidget {
@@ -15,8 +16,6 @@ class TimeList extends StatefulWidget {
 }
 
 class _TimeList extends State<TimeList> {
-  bool _isRepeat = false;
-
   @override
   Widget build(BuildContext context) {
     var windowSize = MediaQuery.of(context).size;
@@ -44,6 +43,7 @@ class _TimeList extends State<TimeList> {
                               context: context,
                               builder: (BuildContext context) =>
                                   TimeDialog.add());
+                          setState(() {});
                         },
                       ),
                     ),
@@ -51,14 +51,20 @@ class _TimeList extends State<TimeList> {
                       child: FlatButton.icon(
                         icon: Icon(
                           Icons.repeat,
-                          color: _isRepeat ? Colors.black : Colors.black26,
+                          color: UserStore().repeat
+                              ? Colors.black
+                              : Colors.black26,
                         ),
                         label: SizedBox(
                           width: 0,
                         ),
                         onPressed: () {
                           setState(() {
-                            _isRepeat = !_isRepeat;
+                            if (UserStore().repeat) {
+                              UserStore.clearRepeat();
+                            } else {
+                              UserStore().repeat = true;
+                            }
                           });
                         },
                       ),
@@ -105,7 +111,7 @@ class _TimeList extends State<TimeList> {
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                              StrUtil.formatToMS(time.time),
+                                              StrUtil.formatToMS(time.seconds),
                                               style: TextStyle(fontSize: 60)),
                                         ),
                                         // 編集ボタン
@@ -113,14 +119,11 @@ class _TimeList extends State<TimeList> {
                                           icon: Icon(Icons.edit),
                                           label: SizedBox(),
                                           onPressed: () async {
-                                            final dialogResult =
-                                                await showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext
-                                                            context) =>
+                                            await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
                                                         TimeDialog.edit(time));
-                                            print(dialogResult);
-
                                             setState(() {});
                                           },
                                         ),
