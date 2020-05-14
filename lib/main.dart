@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timr/button.dart';
 import 'package:timr/app_dialog.dart';
-import 'package:timr/db/db_provider.dart';
+import 'package:timr/store/db_provider.dart';
 import 'package:timr/pages/time_list/time_list.dart';
+import 'package:timr/store/user_store.dart';
 import 'package:timr/util/str_util.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
@@ -51,6 +53,12 @@ class _MyPageState extends State<MyPage> {
   }
 
   initTimes() async {
+    // sharedPreferenceのインスタンスを保存しておく
+    UserStore().prefs = await SharedPreferences.getInstance();
+    if (!(UserStore().repeat ?? false)) {
+      UserStore().repeat = false;
+    }
+
     await DBProvider().checkIsExistTimes();
     _times = await DBProvider().getAllTimes();
     _nowIndex = 0;
@@ -65,13 +73,23 @@ class _MyPageState extends State<MyPage> {
         _nowTime--;
       });
     } else if (_times.asMap().containsKey((_nowIndex + 1))) {
+      // 次の設定時間があった場合の処理
       _handleCounting();
       _nowIndex++;
       _settedTime = _times[_nowIndex].time;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
+    } else if (UserStore().repeat) {
+      // リピート設定をしていた場合の処理
+      _handleCounting();
+      _nowIndex = 0;
+      _settedTime = _times[0].time;
+      _resetTime();
+      _handleCounting();
+      FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
     } else {
+      // タイマーをストップ
       _timer.cancel();
       AppDialog.showFinishDialog(context);
       setState(() {
