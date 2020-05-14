@@ -9,7 +9,7 @@ class UserStore {
   SharedPreferences prefs;
 
   bool get repeat => prefs.getBool(UserStore.prefsKeyRepeat);
-  void set repeat(bool value) =>
+  set repeat(bool value) =>
       UserStore().prefs.setBool(UserStore.prefsKeyRepeat, value);
 
   static clearRepeat() {

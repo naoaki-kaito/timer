@@ -43,6 +43,7 @@ class _TimeList extends State<TimeList> {
                               context: context,
                               builder: (BuildContext context) =>
                                   TimeDialog.add());
+                          setState(() {});
                         },
                       ),
                     ),
@@ -50,7 +51,9 @@ class _TimeList extends State<TimeList> {
                       child: FlatButton.icon(
                         icon: Icon(
                           Icons.repeat,
-                          color: UserStore().repeat? Colors.black : Colors.black26,
+                          color: UserStore().repeat
+                              ? Colors.black
+                              : Colors.black26,
                         ),
                         label: SizedBox(
                           width: 0,
@@ -116,14 +119,11 @@ class _TimeList extends State<TimeList> {
                                           icon: Icon(Icons.edit),
                                           label: SizedBox(),
                                           onPressed: () async {
-                                            final dialogResult =
-                                                await showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext
-                                                            context) =>
+                                            await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
                                                         TimeDialog.edit(time));
-                                            print(dialogResult);
-
                                             setState(() {});
                                           },
                                         ),

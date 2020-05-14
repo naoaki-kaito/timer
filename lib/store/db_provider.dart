@@ -57,7 +57,7 @@ class DBProvider {
     return completer.future;
   }
 
-  createTime(int time) async {
+  createTime(int seconds) async {
     final db = await database;
 
     var res = await db.rawInsert(
@@ -69,9 +69,7 @@ class DBProvider {
         "ELSE (SELECT MAX(order_num) + 1) "
         "END "
         "FROM $_tableName",
-        [60]);
-
-    //var res = await db.insert(_tableName, time.toMap());
+        [seconds]);
     return res;
   }
 
