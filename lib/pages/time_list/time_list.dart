@@ -108,7 +108,7 @@ class _TimeList extends State<TimeList> {
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                              StrUtil.formatToMS(time.time),
+                                              StrUtil.formatToMS(time.seconds),
                                               style: TextStyle(fontSize: 60)),
                                         ),
                                         // 編集ボタン

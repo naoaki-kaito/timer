@@ -40,7 +40,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   Timer _timer;
   int _settedTime = 0;
-  int _nowTime;
+  int _nowSeconds;
   bool _isCounting = false;
   List _times = [];
   int _nowIndex = 0;
@@ -62,21 +62,21 @@ class _MyPageState extends State<MyPage> {
     await DBProvider().checkIsExistTimes();
     _times = await DBProvider().getAllTimes();
     _nowIndex = 0;
-    _settedTime = _times[_nowIndex].time;
+    _settedTime = _times[_nowIndex].seconds;
     _resetTime();
   }
 
   //カウントダウンを実行
   void _countDown(Timer timer) {
-    if (_nowTime > 0) {
+    if (_nowSeconds > 0) {
       setState(() {
-        _nowTime--;
+        _nowSeconds--;
       });
     } else if (_times.asMap().containsKey((_nowIndex + 1))) {
       // 次の設定時間があった場合の処理
       _handleCounting();
       _nowIndex++;
-      _settedTime = _times[_nowIndex].time;
+      _settedTime = _times[_nowIndex].seconds;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
@@ -84,7 +84,7 @@ class _MyPageState extends State<MyPage> {
       // リピート設定をしていた場合の処理
       _handleCounting();
       _nowIndex = 0;
-      _settedTime = _times[0].time;
+      _settedTime = _times[0].seconds;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
@@ -95,7 +95,7 @@ class _MyPageState extends State<MyPage> {
       setState(() {
         _isCounting = false;
       });
-      _settedTime = _times[0].time;
+      _settedTime = _times[0].seconds;
       _resetTime();
     }
   }
@@ -119,7 +119,7 @@ class _MyPageState extends State<MyPage> {
   //リセットボタンをタップした際の処理
   void _resetTime() {
     setState(() {
-      _nowTime = _settedTime;
+      _nowSeconds = _settedTime;
     });
   }
 
@@ -137,7 +137,7 @@ class _MyPageState extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(StrUtil.formatToMS(_nowTime),
+                  Text(StrUtil.formatToMS(_nowSeconds),
                       style: TextStyle(
                         fontSize: 150.0,
                       )),

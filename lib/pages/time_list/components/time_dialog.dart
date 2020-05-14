@@ -10,7 +10,7 @@ class TimeDialog extends StatelessWidget {
 
   TimeDialog.add() : this._init(settedTime: 0);
   TimeDialog.edit(TimeModel time)
-      : this._init(timeObj: time, settedTime: time.time);
+      : this._init(timeObj: time, settedTime: time.seconds);
   TimeDialog._init({Key key, this.timeObj, this.settedTime}) : super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class TimeDialog extends StatelessWidget {
                           }
 
                           if (_timeObj != null) {
-                            _timeObj.time = _settedTime;
+                            _timeObj.seconds = _settedTime;
                             await DBProvider().updateTime(_timeObj);
                           } else {
                             await DBProvider().createTime(_settedTime);

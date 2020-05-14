@@ -40,7 +40,7 @@ class DBProvider {
   Future<void> _createTable(Database db, int version) async {
     return await db.execute("CREATE TABLE $_tableName ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "time INTEGER,"
+        "seconds INTEGER,"
         "order_num INTEGER"
         ")");
   }
@@ -62,7 +62,7 @@ class DBProvider {
 
     var res = await db.rawInsert(
         "INSERT INTO $_tableName "
-        "(time, order_num) "
+        "(seconds, order_num) "
         "SELECT ?, "
         "CASE "
         "WHEN (SELECT MAX(order_num)) IS NULL THEN 0 "
