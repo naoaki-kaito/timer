@@ -11,11 +11,11 @@ class TimeList extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _TimeList();
+    return _TimeListState();
   }
 }
 
-class _TimeList extends State<TimeList> {
+class _TimeListState extends State<TimeList> {
   @override
   Widget build(BuildContext context) {
     var windowSize = MediaQuery.of(context).size;
