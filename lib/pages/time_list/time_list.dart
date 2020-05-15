@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timr/store/db_provider.dart';
 import 'package:timr/model/time.dart';
 import 'package:timr/pages/time_list/components/time_dialog.dart';
 import 'package:timr/store/user_store.dart';
@@ -73,7 +72,7 @@ class _TimeListState extends State<TimeList> {
                 ),
                 Expanded(
                   child: FutureBuilder(
-                    future: DBProvider().getAllTimes(),
+                    future: TimeStore.getAllTimes(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TimeModel>> snapshot) {
                       if (snapshot.hasData) {
@@ -101,7 +100,7 @@ class _TimeListState extends State<TimeList> {
                                       ),
                                     )),
                                 onDismissed: (direction) async {
-                                  await DBProvider().deleteTime(time.id);
+                                  await TimeStore.deleteTime(time.id);
                                   setState(() {});
                                 },
                                 child: Column(

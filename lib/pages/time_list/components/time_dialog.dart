@@ -63,9 +63,9 @@ class TimeDialog extends StatelessWidget {
 
                           if (_timeObj != null) {
                             _timeObj.seconds = _settedTime;
-                            await DBProvider().updateTime(_timeObj);
+                            await TimeStore.updateTime(_timeObj);
                           } else {
-                            await DBProvider().createTime(_settedTime);
+                            await TimeStore.createTime(_settedTime);
                           }
 
                           Navigator.pop(

@@ -16,7 +16,6 @@ class DBProvider {
   DBProvider._internal();
 
   static Database _database;
-  static final _tableName = "times";
 
   Future<Database> get database async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
@@ -38,62 +37,10 @@ class DBProvider {
   }
 
   Future<void> _createTable(Database db, int version) async {
-    return await db.execute("CREATE TABLE $_tableName ("
+    return await db.execute("CREATE TABLE times ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "seconds INTEGER,"
         "order_num INTEGER"
         ")");
-  }
-
-  //時間が設定されているかチェック。無かった場合、追加する
-  Future<void> checkIsExistTimes() async {
-    Completer<void> completer = Completer<void>();
-    List<TimeModel> times = await DBProvider().getAllTimes();
-    if (times.length == 0) {
-      completer.complete();
-    } else {
-      completer.complete();
-    }
-    return completer.future;
-  }
-
-  createTime(int seconds) async {
-    final db = await database;
-
-    var res = await db.rawInsert(
-        "INSERT INTO $_tableName "
-        "(seconds, order_num) "
-        "SELECT ?, "
-        "CASE "
-        "WHEN (SELECT MAX(order_num)) IS NULL THEN 0 "
-        "ELSE (SELECT MAX(order_num) + 1) "
-        "END "
-        "FROM $_tableName",
-        [seconds]);
-    return res;
-  }
-
-  Future<List<TimeModel>> getAllTimes() async {
-    final db = await database;
-    var res = await db.query(_tableName);
-    List<TimeModel> list =
-        res.isNotEmpty ? res.map((c) => TimeModel.fromMap(c)).toList() : [];
-    return list;
-  }
-
-  updateTime(TimeModel time) async {
-    final db = await database;
-    var res = await db.update(_tableName, time.toMap(),
-        where: "id = ?", whereArgs: [time.id]);
-
-    print(res);
-
-    return res;
-  }
-
-  deleteTime(int id) async {
-    final db = await database;
-    var res = db.delete(_tableName, where: "id = ?", whereArgs: [id]);
-    return res;
   }
 }

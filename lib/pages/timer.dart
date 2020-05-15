@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timr/components/app_button.dart';
 import 'package:timr/components/app_dialog.dart';
-import 'package:timr/store/db_provider.dart';
+import 'package:timr/model/time.dart';
 import 'package:timr/store/user_store.dart';
 import 'package:timr/util/str_util.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
@@ -20,7 +20,7 @@ class TimerApp extends StatefulWidget {
 
 class _TimerState extends State<TimerApp> {
   Timer _timer;
-  int _settedTime = 0;
+  int _settedSeconds = 0;
   int _nowSeconds;
   bool _isCounting = false;
   List _times = [];
@@ -40,10 +40,13 @@ class _TimerState extends State<TimerApp> {
       UserStore().repeat = false;
     }
 
-    await DBProvider().checkIsExistTimes();
-    _times = await DBProvider().getAllTimes();
+    _times = await TimeStore.getAllTimes();
+    if (_times.length == 0) {
+      await TimeStore.createTime(60);
+    }
+
     _nowIndex = 0;
-    _settedTime = _times[_nowIndex].seconds;
+    _settedSeconds = _times[_nowIndex].seconds;
     _resetTime();
   }
 
@@ -57,7 +60,7 @@ class _TimerState extends State<TimerApp> {
       // 次の設定時間があった場合の処理
       _handleCounting();
       _nowIndex++;
-      _settedTime = _times[_nowIndex].seconds;
+      _settedSeconds = _times[_nowIndex].seconds;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
@@ -65,7 +68,7 @@ class _TimerState extends State<TimerApp> {
       // リピート設定をしていた場合の処理
       _handleCounting();
       _nowIndex = 0;
-      _settedTime = _times[0].seconds;
+      _settedSeconds = _times[0].seconds;
       _resetTime();
       _handleCounting();
       FlutterRingtonePlayer.playAlarm(looping: true, volume: 0.5);
@@ -76,7 +79,7 @@ class _TimerState extends State<TimerApp> {
       setState(() {
         _isCounting = false;
       });
-      _settedTime = _times[0].seconds;
+      _settedSeconds = _times[0].seconds;
       _resetTime();
     }
   }
@@ -100,7 +103,7 @@ class _TimerState extends State<TimerApp> {
   //リセットボタンをタップした際の処理
   void _resetTime() {
     setState(() {
-      _nowSeconds = _settedTime;
+      _nowSeconds = _settedSeconds;
     });
   }
 
