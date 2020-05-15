@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:timr/app_button.dart';
+import 'package:timr/components/app_button.dart';
 import 'package:timr/store/db_provider.dart';
 import 'package:timr/model/time.dart';
 
