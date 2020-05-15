@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:timr/button.dart';
+import 'package:timr/app_button.dart';
 import 'package:timr/store/db_provider.dart';
 import 'package:timr/model/time.dart';
 
@@ -48,7 +48,7 @@ class TimeDialog extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         //キャンセルボタン
-                        Button.textButton('Cancel', () {
+                        AppButton.textButton('Cancel', () {
                           Navigator.pop(context, 'canceled');
                         }),
                         //間隔スペース
@@ -56,7 +56,7 @@ class TimeDialog extends StatelessWidget {
                           width: 20,
                         ),
                         //セーブボタン
-                        Button.textButton('Save', () async {
+                        AppButton.textButton('Save', () async {
                           if (_settedTime <= 0) {
                             return;
                           }

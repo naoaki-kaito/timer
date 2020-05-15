@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Button {
+class AppButton {
   static textButton(String text, Function callback) {
     return SizedBox(
         height: 60,

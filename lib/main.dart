@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timr/button.dart';
+import 'package:timr/app_button.dart';
 import 'package:timr/app_dialog.dart';
 import 'package:timr/store/db_provider.dart';
 import 'package:timr/pages/time_list/time_list.dart';
@@ -154,7 +154,7 @@ class _MyPageState extends State<MyPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Button.textButton('EDIT', () {
+                                      AppButton.textButton('EDIT', () {
                                         Navigator.pushNamed(
                                             context, '/time_list');
                                       }),
@@ -172,14 +172,14 @@ class _MyPageState extends State<MyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // START, STOP ボタン
-                  Button.textButton(
+                  AppButton.textButton(
                       _isCounting ? 'STOP' : 'START', _handleCounting),
                   // RESET ボタン
                   if (!_isCounting) ...[
                     SizedBox(
                       width: 20,
                     ),
-                    Button.textButton('RESET', initTimes)
+                    AppButton.textButton('RESET', initTimes)
                   ]
                 ],
               ),

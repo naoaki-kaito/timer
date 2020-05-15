@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:timr/button.dart';
+import 'package:timr/app_button.dart';
 
 class AppDialog {
   static void showFinishDialog(BuildContext context) {
@@ -19,7 +19,7 @@ class AppDialog {
                     FlutterRingtonePlayer.stop();
                     Navigator.pop(context);
                   },
-                  child: Button.textButton('OK', null)),
+                  child: AppButton.textButton('OK', null)),
             ],
           );
         });
