@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:timr/model/timer.dart';
 import 'package:timr/pages/timer.dart';
 import 'package:timr/pages/time_list/time_list.dart';
 
@@ -16,7 +18,13 @@ class MyApp extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        home: TimerApp(),
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => TimerModel()),
+          ],
+          child: TimerApp(),
+        ),
+        //home: TimerApp(),
         routes: {
           '/time_list': (context) => TimeList(),
         });

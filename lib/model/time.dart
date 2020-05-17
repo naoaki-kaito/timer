@@ -38,13 +38,13 @@ class TimeStore {
 
     var res = await db.rawInsert(
         "INSERT INTO ${TimeModel._tableName} "
-            "(seconds, order_num) "
-            "SELECT ?, "
-            "CASE "
-            "WHEN (SELECT MAX(order_num)) IS NULL THEN 0 "
-            "ELSE (SELECT MAX(order_num) + 1) "
-            "END "
-            "FROM ${TimeModel._tableName}",
+        "(seconds, order_num) "
+        "SELECT ?, "
+        "CASE "
+        "WHEN (SELECT MAX(order_num)) IS NULL THEN 0 "
+        "ELSE (SELECT MAX(order_num) + 1) "
+        "END "
+        "FROM ${TimeModel._tableName}",
         [seconds]);
     return res;
   }
@@ -53,7 +53,7 @@ class TimeStore {
     final db = await DBProvider().database;
     var res = await db.query(TimeModel._tableName);
     List<TimeModel> list =
-    res.isNotEmpty ? res.map((c) => TimeModel.fromMap(c)).toList() : [];
+        res.isNotEmpty ? res.map((c) => TimeModel.fromMap(c)).toList() : [];
     return list;
   }
 
@@ -69,7 +69,4 @@ class TimeStore {
     var res = db.delete(TimeModel._tableName, where: "id = ?", whereArgs: [id]);
     return res;
   }
-
-
-
 }
