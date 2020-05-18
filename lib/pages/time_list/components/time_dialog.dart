@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:timr/app_button.dart';
-import 'package:timr/store/db_provider.dart';
+import 'package:timr/components/app_button.dart';
 import 'package:timr/model/time.dart';
 
 class TimeDialog extends StatelessWidget {
@@ -63,9 +62,9 @@ class TimeDialog extends StatelessWidget {
 
                           if (_timeObj != null) {
                             _timeObj.seconds = _settedTime;
-                            await DBProvider().updateTime(_timeObj);
+                            await TimeStore.updateTime(_timeObj);
                           } else {
-                            await DBProvider().createTime(_settedTime);
+                            await TimeStore.createTime(_settedTime);
                           }
 
                           Navigator.pop(
