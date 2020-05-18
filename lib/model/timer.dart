@@ -7,21 +7,14 @@ import 'package:timr/store/user_store.dart';
 
 class TimerModel with ChangeNotifier {
   List<TimeModel> times = [];
-  int _nowIndex;
-  int _settedSeconds;
-  int _seconds;
-  bool _isCounting;
-  bool _isFinished;
+  int _nowIndex = 0;
+  int _settedSeconds = 0;
+  int _seconds = 0;
+  bool _isCounting = false;
+  bool _isFinished = false;
   Timer _timer;
 
-  TimerModel.from(List<TimeModel> times) : this(times: times);
-
-  TimerModel({this.times}) {
-    _nowIndex = 0;
-    _settedSeconds = 0;
-    _seconds = 0;
-    _isCounting = false;
-    _isFinished = false;
+  TimerModel() {
     this.initTimes();
   }
 
@@ -42,8 +35,9 @@ class TimerModel with ChangeNotifier {
     if (this.times.length == 0) {
       await TimeStore.createTime(60);
     }
-
-    _settedSeconds = this.times[_nowIndex].seconds;
+    _isFinished = false;
+    _nowIndex = 0;
+    _setTimeOfIndex();
     _resetTime();
   }
 
