@@ -8,7 +8,7 @@ import 'package:timr/store/user_store.dart';
 class TimerModel with ChangeNotifier {
   List<TimeModel> times = [];
   int _nowIndex = 0;
-  int _settedSeconds = 0;
+  int _setSeconds = 0;
   int _seconds = 0;
   bool _isCounting = false;
   bool _isFinished = false;
@@ -43,7 +43,7 @@ class TimerModel with ChangeNotifier {
 
   //リセット処理
   void _resetTime() {
-    _seconds = _settedSeconds;
+    _seconds = _setSeconds;
     notifyListeners();
   }
 
@@ -94,7 +94,7 @@ class TimerModel with ChangeNotifier {
 
   //指定したインデックスの時間をセットする
   void _setTimeOfIndex() {
-    _settedSeconds = this.times[_nowIndex].seconds;
+    _setSeconds = this.times[_nowIndex].seconds;
     _resetTime();
   }
 
