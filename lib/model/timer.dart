@@ -11,7 +11,8 @@ class TimerModel with ChangeNotifier {
   int _setSeconds = 0;
   int _seconds = 0;
   bool _isCounting = false;
-  bool _isFinished = false;
+  bool _isShowFinishDialog = false;
+  double _progress = 0.0;
   Timer _timer;
 
   TimerModel() {
@@ -20,8 +21,14 @@ class TimerModel with ChangeNotifier {
 
   int get nowIndex => _nowIndex;
   int get seconds => _seconds;
+  int get setSeconds => _setSeconds;
   bool get isCounting => _isCounting;
-  bool get isFinished => _isFinished;
+  bool get isShowFinishDialog => _isShowFinishDialog;
+  double get progress => _progress;
+
+  void set isShowFinishDialog(bool value) {
+    _isShowFinishDialog = value;
+  }
 
   //タイマーの初期化処理
   initTimes() async {
@@ -35,7 +42,7 @@ class TimerModel with ChangeNotifier {
     if (this.times.length == 0) {
       await TimeStore.createTime(60);
     }
-    _isFinished = false;
+    _isShowFinishDialog = false;
     _nowIndex = 0;
     _setTimeOfIndex();
     _resetTime();
@@ -44,6 +51,7 @@ class TimerModel with ChangeNotifier {
   //リセット処理
   void _resetTime() {
     _seconds = _setSeconds;
+    _progress = 0;
     notifyListeners();
   }
 
@@ -72,8 +80,10 @@ class TimerModel with ChangeNotifier {
       _isCounting = false;
       _nowIndex = 0;
       _setTimeOfIndex();
-      _isFinished = true;
+      _isShowFinishDialog = true;
     }
+
+    _progress = (!_isShowFinishDialog && _seconds > 0) ? (_seconds / _setSeconds) : 0;
     notifyListeners();
   }
 
