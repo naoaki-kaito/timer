@@ -74,9 +74,8 @@ class _TimerState extends State<TimerApp> {
                 //進捗
                 LinearPercentIndicator(
                   width: MediaQuery.of(context).size.width,
-                  progressColor: Colors.black,
-                  fillColor: Colors.white,
-                  backgroundColor: Colors.white,
+                  progressColor: Colors.white,
+                  backgroundColor: Color(0x00000000),
                   lineHeight: 1.0,
                   animation: true,
                   animateFromLastPercent: true,

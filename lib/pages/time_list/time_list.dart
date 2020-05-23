@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timr/components/app_button.dart';
 import 'package:timr/model/time.dart';
 import 'package:timr/pages/time_list/components/time_dialog.dart';
 import 'package:timr/store/user_store.dart';
@@ -51,8 +52,8 @@ class _TimeListState extends State<TimeList> {
                         icon: Icon(
                           Icons.repeat,
                           color: UserStore().repeat
-                              ? Colors.black
-                              : Colors.black26,
+                              ? AppButton.backgroundColor
+                              : Colors.white30,
                         ),
                         label: SizedBox(
                           width: 0,
