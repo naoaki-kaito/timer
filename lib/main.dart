@@ -13,10 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
+          brightness: Brightness.dark,
           fontFamily: 'Anton',
-          appBarTheme: AppBarTheme(
-            color: Colors.black,
-          ),
         ),
         home: MultiProvider(
           providers: [
